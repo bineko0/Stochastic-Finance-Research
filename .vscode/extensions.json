@@ -1,0 +1,9 @@
+{
+  "recommendations": [
+    "ms-python.python",
+    "ms-python.vscode-pylance",
+    "ms-toolsai.jupyter",
+    "yzhang.markdown-all-in-one",
+    "James-Yu.latex-workshop"
+  ]
+}
