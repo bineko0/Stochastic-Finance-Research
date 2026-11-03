@@ -1,5 +1,8 @@
 {
-  "python.analysis.extraPaths": ["${workspaceFolder}"],
+  "python.analysis.extraPaths": ["${workspaceFolder}/src"],
+  "python.testing.pytestEnabled": true,
+  "python.testing.pytestArgs": ["tests"],
+  "jupyter.notebookFileRoot": "${workspaceFolder}",
   "jupyter.askForKernelRestart": false,
   "files.exclude": {
     "**/__pycache__": true,

@@ -21,7 +21,7 @@ How well can different stochastic models capture the dynamics of financial marke
 
 ## 4. Data
 
-See `02_Data/README.md`. Primary: S&P 500 daily, 2010 to present. Option data: snapshot or simulated if no good history is available.
+See `configs/data.yaml` and `src/sfr/data/`. Primary: S&P 500 daily, 2010 to present. Option data: snapshot or simulated if no good history is available.
 
 ## 5. Methods
 
@@ -66,7 +66,7 @@ See `02_Data/README.md`. Primary: S&P 500 daily, 2010 to present. Option data: s
 ## 9. Week 1 checklist
 
 - [ ] Finalise this proposal
-- [ ] Fix evaluation design (`evaluation_design.md`)
+- [ ] Fix evaluation design (`evaluation_design.md`, then set `settings.sample.train_end` in `configs/settings.yaml`)
 - [ ] Download and process data
-- [ ] Run `week1_exploration.py`, fill in observations
+- [ ] Run `python -m sfr run data`, then `notebooks/01_data_exploration.py`; fill in observations
 - [ ] Start literature map (`literature_map.md`)

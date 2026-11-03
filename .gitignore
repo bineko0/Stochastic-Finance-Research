@@ -1,8 +1,19 @@
 .venv/
 __pycache__/
+*.pyc
+*.egg-info/
+.pytest_cache/
 .ipynb_checkpoints/
 .DS_Store
-*.pyc
 .vscode/*.log
-# Uncomment to keep large raw data out of git:
-# 02_Data/Raw/*.csv
+
+# Data is reproducible from `python -m sfr run data`; keep folders, not contents.
+data/raw/**
+data/processed/**
+data/external/**
+!data/**/.gitkeep
+
+# Generated results (regenerate with `python -m sfr run all`).
+reports/figures/*.png
+reports/tables/*.csv
+reports/summary.md

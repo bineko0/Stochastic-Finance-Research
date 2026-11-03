@@ -1,0 +1,18 @@
+# Stochastic processes and volatility models.
+# Each entry under `models:` is  label -> {type: <registered name>, ...params}.
+# Add a second variant by adding a new label, e.g.  hist_63: {type: historical, window: 63}
+
+processes:
+  fit: [gbm, merton, heston]   # fitted to the main asset's log returns
+  simulation:
+    horizon_years: 1.0
+    n_paths: 200
+
+volatility:
+  benchmark: ewma              # Diebold-Mariano tests are against this model
+  models:
+    hist_21: {type: historical, window: 21}
+    ewma:    {type: ewma, lam: 0.94}
+    garch:   {type: garch, dist: normal}
+    garch_t: {type: garch, dist: t}
+    heston:  {type: heston, rv_window: 21}
