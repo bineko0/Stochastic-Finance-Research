@@ -1,0 +1,13 @@
+# Risk analysis: 1-day Value-at-Risk and Expected Shortfall on log returns.
+# Each model is  label -> {type: <registered name>, ...params}.
+
+asset: null                # null = data.main_asset
+levels: [0.95, 0.99]       # confidence levels
+window: 500                # rolling estimation window (trading days)
+
+models:
+  historical: {type: historical}
+  gaussian:   {type: gaussian}
+  student_t:  {type: student_t}
+  mc_gbm:     {type: monte_carlo, process: gbm, n_sims: 10000}
+  fhs_garch:  {type: filtered_historical, vol_model: {type: garch}, refit_every: 20}

@@ -1,0 +1,17 @@
+# Global settings shared by every stage.
+# Any value can be overridden from the command line, e.g.
+#   python -m sfr run all --set settings.seed=7
+
+seed: 42
+trading_days: 252          # annualisation factor, dt = 1 / trading_days
+
+paths:                     # relative to the project root
+  raw: data/raw            # as downloaded, one sub-folder per source
+  processed: data/processed
+  external: data/external  # files you drop in by hand (Bloomberg exports, ...)
+  reports: reports
+
+sample:
+  start: "2010-01-01"
+  end: null                # null = up to today
+  train_end: "2019-12-31"  # models are fitted on <= train_end, evaluated after it

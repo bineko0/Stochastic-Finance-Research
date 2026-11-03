@@ -1,9 +1,17 @@
+# Core (also declared in pyproject.toml)
 numpy
 pandas
 scipy
 matplotlib
-statsmodels
-arch
+pyyaml
+
+# Data sources (only the one you use is needed)
 yfinance
+
+# Development
+pytest
 jupyter
 ipykernel
+
+# Then install the project itself in editable mode:
+#   pip install -e .

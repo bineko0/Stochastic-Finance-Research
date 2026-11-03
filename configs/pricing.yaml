@@ -1,0 +1,31 @@
+# Derivative pricing.
+# Each pricer is  label -> {type: <registered name>, ...params}.
+# The string "auto" is replaced by the volatility estimate chosen in `sigma`.
+
+underlying: null           # null = data.main_asset
+spot: null                 # null = last processed price of the underlying
+rate: 0.04                 # continuously compounded risk-free rate
+dividend: 0.0
+sigma: historical          # a number, or "historical" = annualised std of the last year
+
+grid:
+  moneyness: [0.8, 0.9, 1.0, 1.1, 1.2]   # strike / spot
+  maturities: [0.25, 1.0]                # years
+  kinds: [call, put]
+
+benchmark: bs              # error columns are measured against this pricer
+
+pricers:
+  bs:        {type: black_scholes, sigma: auto}
+  mc_gbm:    {type: monte_carlo, process: gbm, process_params: {sigma: auto}, n_paths: 100000}
+  mc_merton: {type: monte_carlo, process: merton,
+              process_params: {sigma: 0.15, lam: 1.0, jump_mean: -0.08, jump_std: 0.10},
+              n_paths: 100000}
+  heston:    {type: heston_fourier, v0: 0.04, kappa: 2.0, theta: 0.04, xi: 0.5, rho: -0.7}
+  mc_heston: {type: monte_carlo, process: heston,
+              process_params: {v0: 0.04, kappa: 2.0, theta: 0.04, xi: 0.5, rho: -0.7},
+              n_paths: 20000, steps_per_year: 100}
+
+convergence:               # MC price vs number of paths, at-the-money 1y call
+  pricer: mc_gbm
+  n_paths: [1000, 5000, 20000, 100000]

@@ -1,0 +1,43 @@
+# Where the data comes from.
+#
+# To change the source of ALL assets: change `default_source`
+#   (or run:  python -m sfr run data --set data.default_source=csv)
+# To change the source of ONE asset: give it its own `source:`.
+# Nothing downstream of the data stage depends on the source: every source is
+# standardised to the same columns in data/processed/ (see src/sfr/data/schema.py).
+
+default_source: yahoo
+main_asset: SP500          # the series most stages analyse
+
+sources:                   # constructor parameters per source (python -m sfr list)
+  yahoo:
+    auto_adjust: false
+  csv:                     # Bloomberg / Refinitiv / Kaggle exports in data/external/
+    directory: data/external
+    filename: "{symbol}.csv"
+    date_column: Date
+    column_map: {}         # extra renames, e.g. {"Last Price": close}
+  synthetic:               # offline GBM + jumps, no internet needed
+    mu: 0.07
+    sigma: 0.18
+    s0: 100.0
+    jump_intensity: 2.0
+    jump_mean: -0.03
+    jump_std: 0.04
+    seed: 0
+
+assets:                    # name used in the project -> symbol at the source
+  SP500:       {symbol: "^GSPC"}
+  SPY:         {symbol: SPY}
+  AAPL:        {symbol: AAPL}
+  MSFT:        {symbol: MSFT}
+  VIX:         {symbol: "^VIX"}
+  EUROSTOXX50: {symbol: "^STOXX50E"}
+  # Per-asset override, reads data/external/SPX_Index.csv:
+  # SPX_BBG:   {symbol: SPX_Index, source: csv}
+
+validation:
+  max_nan_frac: 0.05       # warn if more prices than this are missing
+  max_abs_log_return: 0.25 # warn on daily moves larger than this
+  max_gap_days: 7          # warn on calendar gaps longer than this
+  strict: false            # true = stop at the first asset that fails
