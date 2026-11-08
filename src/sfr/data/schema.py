@@ -27,6 +27,7 @@ _ALIASES = {
 }
 
 
+#Column renaming function
 def _canonical(column) -> str:
     name = str(column).strip().lower().replace(" ", "_").replace(".", "_")
     return _ALIASES.get(name, name)
@@ -34,13 +35,15 @@ def _canonical(column) -> str:
 
 def standardize(df: pd.DataFrame, column_map: dict | None = None) -> pd.DataFrame:
     df = df.copy()
-    if isinstance(df.columns, pd.MultiIndex):
+    #1. Rename
+    if isinstance(df.columns, pd.MultiIndex):               #check multiple level
         df.columns = df.columns.get_level_values(0)
-    if column_map:
+    if column_map:                                          #change to given column name
         df = df.rename(columns=column_map)
-    df.columns = [_canonical(c) for c in df.columns]
+    df.columns = [_canonical(c) for c in df.columns]        #put into previous function
     df = df.loc[:, ~pd.Index(df.columns).duplicated()]
 
+    #2. Close price
     if "close" not in df.columns and "adj_close" not in df.columns:
         raise ValueError(f"No close price column found in {list(df.columns)}")
     if "adj_close" not in df.columns:
@@ -48,6 +51,7 @@ def standardize(df: pd.DataFrame, column_map: dict | None = None) -> pd.DataFram
     if "close" not in df.columns:
         df["close"] = df["adj_close"]
 
+    #3. Normalize date
     index = pd.DatetimeIndex(pd.to_datetime(df.index))
     if index.tz is not None:
         index = index.tz_localize(None)
@@ -56,5 +60,6 @@ def standardize(df: pd.DataFrame, column_map: dict | None = None) -> pd.DataFram
     df = df.sort_index()
     df = df[~df.index.duplicated(keep="last")]
 
+    #4. Only keep needed column
     keep = [c for c in PRICE_COLUMNS if c in df.columns]
     return df[keep].apply(pd.to_numeric, errors="coerce").astype(float)
